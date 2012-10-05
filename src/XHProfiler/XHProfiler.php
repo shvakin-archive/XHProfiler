@@ -15,6 +15,15 @@ class XHProfiler
 
     protected static $guiUri = '';
 
+    public static function init(array $options =[])
+    {
+        if (!empty($options['enabled'])) {
+            //@todo проверка на куку или паметр
+            static::setGuiUri($options['uri']);
+            static::start($_SERVER['SERVER_NAME'], true);
+        }
+    }
+
     public static function setGuiUri($uri)
     {
         static::$guiUri = $uri;
@@ -42,6 +51,14 @@ class XHProfiler
         }
     }
 
+    /**
+     * @param string $name
+     * @param bool|\Closure $output
+     * @param bool $cpu
+     * @param bool $memory
+     * @param array $ignored
+     * @return bool
+     */
     public static function start($name = 'xhprof', $output = false, $cpu = true, $memory = true, $ignored = [])
     {
         if (!static::checkEnv()) {
@@ -82,7 +99,7 @@ class XHProfiler
                     $uri = 'http://' . $_SERVER['SERVER_NAME'] . '/index.php';
                 }
                 $outFunction = function ($runId, $name) use ($uri) {
-                    echo "<a target=_blanc href = \"$uri?run=$runId&source=".static::$name .'">xhprof report</a>';
+                    echo "\n<br />\n<a target=_blanc href = \"$uri?run=$runId&source=".static::$name .'">xhprof report</a>'."\n";
                 };
             }
         }
