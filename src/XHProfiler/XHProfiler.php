@@ -85,6 +85,7 @@ class XHProfiler
     public static function sendData()
     {
         $xhprofData = xhprof_disable();
+        static::$started = false;
 
         $xhprofRuns = new \XHProfRuns_Default();
         $runId = $xhprofRuns->save_run($xhprofData, static::$name);
